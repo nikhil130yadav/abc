@@ -4,6 +4,12 @@ from chatbotfinal import Session
 app = Flask(__name__)
 session = Session()
 
+
+@app.route("/",methods=["GET"])
+def base():
+    return redirect("/chat")
+
+
 @app.route("/chat",methods=["GET"])
 @app.route("/chat/",methods=["GET"])
 def Welcome():
@@ -16,6 +22,7 @@ def Welcome():
 def chat(inp):
     if(str(inp)=='res'):
         return redirect("/chat")
+    
     result = session.reply(str(inp))
     return result
 if __name__== '__main__':
