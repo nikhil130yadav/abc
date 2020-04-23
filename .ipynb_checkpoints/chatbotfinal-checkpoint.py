@@ -29,10 +29,11 @@ def check_actions(current_intent, attributes, context):
         #import pandas as pd
         df=pd.read_csv('Datafiles/Mobile.csv',encoding='latin-1')
         print(df[(df['mobtype']==attributes['motype']) & (df['ramGet']==attributes['ramGet']) & (df['istorage']==attributes['istorage']) & (df['BRAND']==attributes['brand'])])
+        result = df[(df['mobtype']==attributes['motype']) & (df['ramGet']==attributes['ramGet']) & (df['istorage']==attributes['istorage']) & (df['BRAND']==attributes['brand'])]
     
     #print('\nBOT : I will be happy to serve you again \n')
     print('\n')
-    return 'action: ' + current_intent.action, context
+    return 'Action: ' + current_intent.action, context,"<br>"+result.to_html()
 
 def check_required_params(current_intent, attributes, context):
     '''Collects attributes pertaining to the current intent'''
@@ -176,8 +177,8 @@ class Session:
         #prompt being None means all parameters satisfied, perform the intent action
         if prompt is None:
             if self.context.name!='IntentComplete':
-                prompt, self.context = check_actions(self.current_intent, self.attributes, self.context)
-        
+                prompt, self.context,result = check_actions(self.current_intent, self.attributes, self.context)
+                prompt += result
         #Resets the state after the Intent is complete
         if self.context.name=='IntentComplete':
             self.attributes = {}
